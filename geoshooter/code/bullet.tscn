@@ -5,7 +5,7 @@
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_d153x"]
 
-[node name="bullet" type="Area2D"]
+[node name="bullet" type="CharacterBody2D"]
 collision_layer = 4
 collision_mask = 2
 script = ExtResource("1_d153x")
@@ -18,5 +18,4 @@ texture = ExtResource("1_xtdve")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_d153x")
 
-[connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]
 [connection signal="screen_exited" from="VisibleOnScreenEnabler2D" to="." method="_on_visible_on_screen_enabler_2d_screen_exited"]

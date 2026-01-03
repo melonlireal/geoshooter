@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cfcuemvu0doe1" path="res://code/triangle.gd" id="1_bmw84"]
 [ext_resource type="Texture2D" uid="uid://bi1twkj76no4a" path="res://asset/triangle.png" id="2_05mss"]
 
-[node name="triangle" type="CharacterBody2D" groups=["enemy"]]
+[node name="triangle" type="Area2D" groups=["enemy"]]
 scale = Vector2(3, 3)
 collision_layer = 2
 collision_mask = 5
@@ -13,6 +13,10 @@ script = ExtResource("1_bmw84")
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("2_05mss")
 
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-44, 38, 44, 38, 0, -38)
+metadata/_edit_lock_ = true
+
 [node name="healthdisplay" type="RichTextLabel" parent="."]
 offset_left = -10.0
 offset_top = -3.0
@@ -20,6 +24,4 @@ offset_right = 30.0
 offset_bottom = 37.0
 text = "10"
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
-polygon = PackedVector2Array(-44, 38, 44, 38, 0, -38)
-metadata/_edit_lock_ = true
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

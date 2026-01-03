@@ -1,11 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://s4aa004npjfs"]
+[gd_scene load_steps=9 format=3 uid="uid://s4aa004npjfs"]
 
 [ext_resource type="Script" uid="uid://cgvt47cl8kpmc" path="res://code/main_game.gd" id="1_44ujh"]
 [ext_resource type="PackedScene" uid="uid://dwwg067l8r37s" path="res://code/score_ui.tscn" id="1_p7g5i"]
 [ext_resource type="PackedScene" uid="uid://df7x3hsymu301" path="res://code/player.tscn" id="2_wyj87"]
 [ext_resource type="PackedScene" uid="uid://c1xsuen6pfee8" path="res://code/square.tscn" id="4_dfe3b"]
 [ext_resource type="PackedScene" uid="uid://cui3l7juujpp8" path="res://code/triangle.tscn" id="5_5g0dd"]
-[ext_resource type="PackedScene" uid="uid://cetqibemgnh11" path="res://code/pentagon.tscn" id="6_unppu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_44ujh"]
 size = Vector2(20, 692)
@@ -22,7 +21,11 @@ script = ExtResource("1_44ujh")
 
 [node name="scoreUi" parent="score" instance=ExtResource("1_p7g5i")]
 
+[node name="shoot_cooldown" type="Timer" parent="."]
+wait_time = 0.2
+
 [node name="spawn_cooldown" type="Timer" parent="."]
+one_shot = true
 autostart = true
 
 [node name="Area2D" type="StaticBody2D" parent="."]
@@ -59,9 +62,11 @@ collision_mask = 10
 curve = SubResource("Curve2D_dfe3b")
 
 [node name="triangle" parent="." instance=ExtResource("5_5g0dd")]
-position = Vector2(526, 113)
+position = Vector2(502, 125)
+size = 1.0
+health = 10
+split_num = 2
+SPEED = 100
 
-[node name="pentagon" parent="." instance=ExtResource("6_unppu")]
-position = Vector2(776, 155)
-
+[connection signal="timeout" from="shoot_cooldown" to="." method="_on_shoot_cooldown_timeout"]
 [connection signal="timeout" from="spawn_cooldown" to="." method="_on_spawn_cooldown_timeout"]

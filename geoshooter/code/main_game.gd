@@ -1,49 +1,43 @@
 extends Node2D
 
-var can_shoot = true
+var last_death = ""
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
 
-func _process(_delta: float) -> void:
-	if Input.is_action_pressed("shoot"):
-		if !can_shoot:
-			return
-		elif can_shoot:
-			can_shoot = false
-			$shoot_cooldown.start()
-		var bul = preload("res://code/bullet.tscn")
-		var bullet:Bullet = bul.instantiate()
-		var direction: Vector2 = (get_global_mouse_position() - %player.position)
-		direction = direction.normalized()
-		bullet.get_direction(direction)
-		bullet.position = %player.position
-		self.add_child(bullet)
 
 func add_enemy():
-	var square: Enemy = preload("res://code/square.tscn").instantiate()
-	var triangle: Enemy = preload("res://code/triangle.tscn").instantiate()
-	var random = [square, triangle]
-	var enemy: Enemy = random.pick_random()
+	var square: PackedScene = preload("res://code/square.tscn")
+	var triangle: PackedScene = preload("res://code/triangle.tscn")
+	var pentagon: PackedScene = preload("res://code/pentagon.tscn")
+	var random = [square, triangle, pentagon]
+	var rand_ene: PackedScene = random.pick_random()
+	var enemy: Enemy = rand_ene.instantiate()
 	enemy.dead.connect(enemy_died)
 	enemy.spawn_child.connect(spawn_children)
 	var screen_size = get_viewport_rect().size
 	enemy.position.y = -500.0
 	enemy.position.x = randf_range(0, screen_size.x)
 	enemy.size = randi_range(2,3)
-	print(enemy.size)
 	enemy.autodie_pos = screen_size + Vector2(0, 500)
 	$level.add_child(enemy)
 	
-func enemy_died():
-	$score/scoreUi.update_score(1000)
+func enemy_died(dead_name: String):
+	print(dead_name, " is dead！")
+	last_death = dead_name
+	$score/scoreUi.update_score(10)
+	%player.update_killed(dead_name)
 	pass
 	
-func spawn_children(position: Vector2, child: Enemy, raduis: int, split_num: int, size: int):
-	pass
+func spawn_children(position: Vector2, child: PackedScene, raduis: int, split_num: int, size: int):
+	var new_enemy: Enemy = child.instantiate()
+	new_enemy.position = position
+	new_enemy.size = size
+	new_enemy.dead.connect(enemy_died)
+	new_enemy.spawn_child.connect(spawn_children)
+	new_enemy.autodie_pos = get_viewport_rect().size + Vector2(0, 500)
+	$level.add_child(new_enemy)
 	
-func _on_shoot_cooldown_timeout() -> void:
-	can_shoot = true
 
 
 func _on_spawn_cooldown_timeout() -> void:

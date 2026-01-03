@@ -1,12 +1,12 @@
 extends Enemy
 
-const SQUSCALEFACTOR = 1
+const PENSCALEFACTOR = 1.5
 
 func _ready() -> void:
-	self_name = "square"
-	weak_at = "pentagon"
-	children = preload("res://code/square.tscn")
-	self.scale = Vector2(size*SQUSCALEFACTOR, size*SQUSCALEFACTOR)
+	self_name = "pentagon"
+	weak_at = "triangle"
+	children = preload("res://code/pentagon.tscn")
+	self.scale = Vector2(size*PENSCALEFACTOR, size*PENSCALEFACTOR)
 	$healthdisplay.text = str(health)
 	
 func _physics_process(delta: float) -> void:
@@ -19,4 +19,3 @@ func gets_damage(damage: int):
 	
 func split():
 	super.split()
-	
