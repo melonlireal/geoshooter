@@ -3,18 +3,29 @@ class_name Player
 
 var InputDirection:Vector2 = Vector2.ZERO
 var HEALTHSCALE = 0.05
-const SPEED = 600
+var SPEED = 600
 const ACCELERATION = 30
 var health = 10
-@export var last_killed = ""
 var pen_col: Color = Color(255, 0.0, 0.0, 1.0)
 var tri_col: Color = Color(0.988, 1.0, 0.0, 1.0)
 var squ_col: Color = Color(0.0, 0.847, 1.0, 1.0)
 var curr_col: Color = Color(1.0, 1.0, 1.0, 1.0)
 var can_shoot = true
 
-func _input(_event: InputEvent) -> void:
-	InputDirection = Input.get_vector("Left","Right","Up","Down")
+var pierce = false
+var max_pierce = 0
+
+var rage = false
+var rage_factor = 1
+
+var invincible = false
+
+signal decrease_fac
+signal player_dead
+
+func _process(_delta: float) -> void:
+	if not is_inside_tree():
+		return
 	if Input.is_action_pressed("shoot"):
 		if !can_shoot:
 			return
@@ -25,11 +36,21 @@ func _input(_event: InputEvent) -> void:
 		var bullet:Bullet = bul.instantiate()
 		var direction: Vector2 = (get_global_mouse_position() - self.global_position)
 		direction = direction.normalized()
+		bullet.rotation = direction.angle() + PI/2
 		bullet.get_direction(direction)
 		bullet.position = self.global_position
-		bullet.last_killed = last_killed
 		bullet.set_col(curr_col)
+		bullet.damage = randi_range(4,6)
+		if pierce:
+			bullet.pierce_num = max_pierce
+			max_pierce += 1
+		if rage:
+			bullet.damage = bullet.damage * (1 + log(rage_factor))
+			rage_factor += 0.2
 		get_parent().add_child(bullet)
+		
+func _input(_event: InputEvent) -> void:
+	InputDirection = Input.get_vector("Left","Right","Up","Down")
 		
 func _physics_process(delta: float) -> void:
 	if InputDirection == Vector2.ZERO:
@@ -37,24 +58,51 @@ func _physics_process(delta: float) -> void:
 	velocity = self.velocity.lerp(InputDirection * SPEED, ACCELERATION*delta)
 	move_and_slide()
 	
-func update_killed(killed: String):
-	last_killed = killed
-	if last_killed == "pentagon":
-		$Sprite2D.modulate = pen_col
-		curr_col = pen_col
-	elif last_killed == "triangle":
-		$Sprite2D.modulate = tri_col
-		curr_col = tri_col
-	elif last_killed == "square":
-		$Sprite2D.modulate = squ_col
-		curr_col = squ_col
 
 func get_hit():
 	health -= 1
+	decrease_fac.emit()
 	self.scale = Vector2(HEALTHSCALE * health, HEALTHSCALE * health)
 	if health <= 0:
-		queue_free()
+		$Sprite2D.visible = false
+		$CollisionShape2D.disabled = true	
+		$sfxs/dead.play()
+		player_dead.emit()
+		return
+	$sfxs/get_hit.play()
 
-
+func switch_pierce_ammo():
+	#print("pierce")
+	$Sprite2D.modulate = tri_col
+	pierce = true
+	max_pierce = 2
+	
+func end_pierce_ammo():
+	$Sprite2D.modulate = curr_col
+	pierce = false
+	max_pierce = 0
+	
+func switch_rage():
+	$Sprite2D.modulate = pen_col
+	#print("rage")
+	rage = true
+	
+func end_rage():
+	rage = false
+	rage_factor = 2
+	
+func switch_invincible():
+	#print("invincible on!")
+	invincible = true
+	SPEED = SPEED * 2
+	
+func end_invincible():
+	invincible = false
+	SPEED = SPEED/2
+	
+	
 func _on_shoot_cooldown_timeout() -> void:
 	can_shoot = true
+
+func _on_dead_finished() -> void:
+	queue_free()

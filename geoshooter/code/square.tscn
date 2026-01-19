@@ -1,10 +1,33 @@
-[gd_scene load_steps=4 format=3 uid="uid://c1xsuen6pfee8"]
+[gd_scene load_steps=10 format=3 uid="uid://c1xsuen6pfee8"]
 
 [ext_resource type="Script" uid="uid://bu5gmn2sc2oqs" path="res://code/square.gd" id="1_xb206"]
-[ext_resource type="Texture2D" uid="uid://bep5xue38rnad" path="res://asset/square.png" id="2_ojh8v"]
+[ext_resource type="Texture2D" uid="uid://70sh7ks5nm85" path="res://asset/square_buttom.png" id="2_f8nx3"]
+[ext_resource type="Texture2D" uid="uid://4fptt6all6ri" path="res://asset/square_health.png" id="3_46dfd"]
+[ext_resource type="Texture2D" uid="uid://bep5xue38rnad" path="res://asset/square.png" id="4_46dfd"]
+[ext_resource type="AudioStream" uid="uid://dl1cvxuxiol1c" path="res://music/sfx/hurt_3.wav" id="5_pwf7x"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ojh8v"]
 size = Vector2(100, 100)
+
+[sub_resource type="Curve" id="Curve_46dfd"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.9432624, 0.15730345), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_pwf7x"]
+curve = SubResource("Curve_46dfd")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ij8tf"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 56.56
+velocity_pivot = Vector3(0, 100, 0)
+direction = Vector3(1, -1, 0)
+initial_velocity_min = -30.0
+initial_velocity_max = 30.0
+gravity = Vector3(0, 200, 0)
+scale_min = 0.099999994
+scale_max = 0.19999999
+alpha_curve = SubResource("CurveTexture_pwf7x")
 
 [node name="square" type="Area2D" groups=["enemy"]]
 scale = Vector2(2.5, 2.5)
@@ -14,15 +37,39 @@ script = ExtResource("1_xb206")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.2, 0.2)
-texture = ExtResource("2_ojh8v")
+texture = ExtResource("2_f8nx3")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="health" type="Sprite2D" parent="."]
+scale = Vector2(0.19999999, 0.19999999)
+texture = ExtResource("3_46dfd")
+
+[node name="collision" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_ojh8v")
 
-[node name="healthdisplay" type="RichTextLabel" parent="."]
-offset_left = -10.0
-offset_top = -13.0
-offset_right = 30.0
-offset_bottom = 27.0
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.05
+one_shot = true
+autostart = true
+
+[node name="dead_particle" type="GPUParticles2D" parent="."]
+modulate = Color(1, 1, 1, 0.50980395)
+emitting = false
+amount = 10
+texture = ExtResource("4_46dfd")
+lifetime = 5.0
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_ij8tf")
+
+[node name="dead_timer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="music" type="Node" parent="."]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="music"]
+stream = ExtResource("5_pwf7x")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="dead_timer" to="." method="_on_dead_timer_timeout"]

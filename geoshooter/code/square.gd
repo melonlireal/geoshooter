@@ -3,20 +3,18 @@ extends Enemy
 const SQUSCALEFACTOR = 1
 
 func _ready() -> void:
-	self_name = "square"
-	weak_at = "pentagon"
+	self_name = "squ"
 	children = preload("res://code/square.tscn")
+	split_num = 4
 	self.scale = Vector2(size*SQUSCALEFACTOR, size*SQUSCALEFACTOR)
-	$healthdisplay.text = str(health)
 	
-func _physics_process(delta: float) -> void:
-	var basic = Vector2(0,1)
-	position += basic * SPEED * delta
 
 func gets_damage(damage: int):
 	super.gets_damage(damage)
-	$healthdisplay.text = str(health)
 	
 func split():
 	super.split()
-	
+
+
+func _on_timer_timeout() -> void:
+	just_spawn = true

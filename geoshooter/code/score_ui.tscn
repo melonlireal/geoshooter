@@ -1,6 +1,15 @@
-[gd_scene load_steps=5 format=3 uid="uid://dwwg067l8r37s"]
+[gd_scene load_steps=15 format=3 uid="uid://dwwg067l8r37s"]
 
 [ext_resource type="Script" uid="uid://bkge4raa263h8" path="res://code/score_ui.gd" id="1_cvgiq"]
+[ext_resource type="Texture2D" uid="uid://cp5ab4djp7cir" path="res://asset/triangle_bottom.png" id="2_fcsox"]
+[ext_resource type="Texture2D" uid="uid://8djm0cwbhv5h" path="res://asset/triangle_health.png" id="3_booxu"]
+[ext_resource type="Texture2D" uid="uid://70sh7ks5nm85" path="res://asset/square_buttom.png" id="4_fl1l4"]
+[ext_resource type="Texture2D" uid="uid://4fptt6all6ri" path="res://asset/square_health.png" id="5_fl1l4"]
+[ext_resource type="Texture2D" uid="uid://7j5laiqorfil" path="res://asset/pentagon_bottom.png" id="5_wi50l"]
+[ext_resource type="Texture2D" uid="uid://bk43ugqtikdu5" path="res://asset/pentagon_health.png" id="7_wi50l"]
+[ext_resource type="AudioStream" uid="uid://bc6e4w00gl1c3" path="res://music/bgm/start.ogg" id="8_fl1l4"]
+[ext_resource type="AudioStream" uid="uid://dq17a6lhv61vr" path="res://music/bgm/intermediate.ogg" id="9_wi50l"]
+[ext_resource type="AudioStream" uid="uid://dcjrmlud4udu2" path="res://music/bgm/tense.ogg" id="10_r108i"]
 
 [sub_resource type="Animation" id="Animation_n5voy"]
 length = 0.001
@@ -63,7 +72,20 @@ _data = {
 &"increase_score": SubResource("Animation_cvgiq")
 }
 
-[node name="scoreUi" type="Control"]
+[sub_resource type="GDScript" id="GDScript_wi50l"]
+script/source = "extends Node
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+"
+
+[node name="UI" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -72,31 +94,64 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_cvgiq")
 
+[node name="skills2" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.142
+offset_left = -2.0
+offset_right = 0.15185547
+offset_bottom = -0.01600647
+grow_horizontal = 0
+color = Color(0.7647059, 0.7647059, 0.7647059, 0.34509805)
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_n5voy")
 }
 
 [node name="scorefactor" type="RichTextLabel" parent="."]
-layout_mode = 0
-offset_left = 782.2
-offset_top = 10.0
-offset_right = 863.2
-offset_bottom = 204.0
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.6
+anchor_right = 0.75
+anchor_bottom = 0.07700001
+offset_left = -0.50408936
+offset_right = 0.30395508
+offset_bottom = 0.10399628
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.3
 theme_override_colors/default_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
 theme_override_font_sizes/normal_font_size = 32
-text = "X128"
+bbcode_enabled = true
+text = "[center]X128[/center]"
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.6
+anchor_top = 0.083000004
+anchor_right = 0.75
+anchor_bottom = 0.09
+offset_left = -0.35198975
+offset_top = 0.21599579
+offset_right = -0.2000122
+offset_bottom = -0.3200035
+max_value = 2.0
+show_percentage = false
 
 [node name="score" type="RichTextLabel" parent="."]
-layout_mode = 0
-offset_left = 403.2
-offset_top = 10.0
-offset_right = 863.19995
-offset_bottom = 204.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.35
+anchor_top = 0.01
+anchor_right = 0.55
+anchor_bottom = 0.1
+offset_right = 0.25598145
+offset_bottom = 0.24798584
 pivot_offset = Vector2(230, 100)
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 1.4
@@ -105,3 +160,70 @@ theme_override_constants/outline_size = 5
 theme_override_font_sizes/normal_font_size = 32
 bbcode_enabled = true
 text = "[center]0000000000[/center]"
+
+[node name="music" type="Node" parent="."]
+script = SubResource("GDScript_wi50l")
+
+[node name="curr_mus" type="AudioStreamPlayer" parent="music"]
+stream = ExtResource("8_fl1l4")
+
+[node name="start_mus" type="AudioStreamPlayer" parent="music"]
+stream = ExtResource("8_fl1l4")
+volume_db = -10.0
+
+[node name="mid_mus" type="AudioStreamPlayer" parent="music"]
+stream = ExtResource("9_wi50l")
+volume_db = -10.0
+
+[node name="ten_mus" type="AudioStreamPlayer" parent="music"]
+stream = ExtResource("10_r108i")
+volume_db = -10.0
+
+[node name="score_factor_decrease" type="Timer" parent="."]
+wait_time = 2.0
+autostart = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
+anchor_top = 0.01
+anchor_right = 0.27400002
+anchor_bottom = 0.13
+offset_right = 0.35198975
+offset_bottom = -0.056015015
+theme_override_constants/separation = 10
+
+[node name="trienergy" type="TextureProgressBar" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+max_value = 20.0
+fill_mode = 3
+nine_patch_stretch = true
+texture_under = ExtResource("2_fcsox")
+texture_progress = ExtResource("3_booxu")
+
+[node name="squenergy" type="TextureProgressBar" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+max_value = 20.0
+fill_mode = 3
+nine_patch_stretch = true
+texture_under = ExtResource("4_fl1l4")
+texture_progress = ExtResource("5_fl1l4")
+
+[node name="penenergy" type="TextureProgressBar" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+max_value = 20.0
+fill_mode = 3
+nine_patch_stretch = true
+texture_under = ExtResource("5_wi50l")
+texture_progress = ExtResource("7_wi50l")
+
+[connection signal="changed" from="ProgressBar" to="." method="_on_progress_bar_changed"]
+[connection signal="value_changed" from="ProgressBar" to="." method="_on_progress_bar_value_changed"]
+[connection signal="timeout" from="score_factor_decrease" to="." method="_on_score_factor_decrease_timeout"]

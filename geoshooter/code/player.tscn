@@ -1,8 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://df7x3hsymu301"]
+[gd_scene load_steps=7 format=3 uid="uid://df7x3hsymu301"]
 
 [ext_resource type="Script" uid="uid://bbuunvk8x3205" path="res://code/player.gd" id="1_br683"]
 [ext_resource type="Texture2D" uid="uid://dbnc4tsbs1x0v" path="res://asset/player.png" id="2_v5vfy"]
 [ext_resource type="Script" uid="uid://b3xosp40s3qk3" path="res://code/state_machine.gd" id="3_bdtmh"]
+[ext_resource type="AudioStream" uid="uid://cegmugt174mbn" path="res://music/sfx/explosion_5.wav" id="4_xueb2"]
+[ext_resource type="AudioStream" uid="uid://bxpsk3ava1g8a" path="res://music/sfx/disappear.wav" id="5_roao2"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_br683"]
 radius = 101.0
@@ -16,6 +18,7 @@ script = ExtResource("1_br683")
 texture = ExtResource("2_v5vfy")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource("CircleShape2D_br683")
 
 [node name="state_machine" type="Node" parent="."]
@@ -26,4 +29,14 @@ script = ExtResource("3_bdtmh")
 [node name="shoot_cooldown" type="Timer" parent="."]
 wait_time = 0.2
 
+[node name="sfxs" type="Node" parent="."]
+
+[node name="get_hit" type="AudioStreamPlayer" parent="sfxs"]
+stream = ExtResource("4_xueb2")
+
+[node name="dead" type="AudioStreamPlayer" parent="sfxs"]
+stream = ExtResource("5_roao2")
+volume_db = 10.0
+
 [connection signal="timeout" from="shoot_cooldown" to="." method="_on_shoot_cooldown_timeout"]
+[connection signal="finished" from="sfxs/dead" to="." method="_on_dead_finished"]

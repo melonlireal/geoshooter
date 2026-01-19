@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cb77gntwcyjit"
-path="res://.godot/imported/bullet.png-7754c32cfe665bd5fde680956529c957.ctex"
+uid="uid://7j5laiqorfil"
+path="res://.godot/imported/pentagon_bottom.png-eee82ebe6e60b66e95910f9026ce5254.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://asset/bullet.png"
-dest_files=["res://.godot/imported/bullet.png-7754c32cfe665bd5fde680956529c957.ctex"]
+source_file="res://asset/pentagon_bottom.png"
+dest_files=["res://.godot/imported/pentagon_bottom.png-eee82ebe6e60b66e95910f9026ce5254.ctex"]
 
 [params]
 

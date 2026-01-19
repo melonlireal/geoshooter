@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://c1xsuen6pfee8"]
+
+[ext_resource type="Script" uid="uid://bu5gmn2sc2oqs" path="res://code/square.gd" id="1_xb206"]
+[ext_resource type="Texture2D" uid="uid://70sh7ks5nm85" path="res://asset/square_buttom.png" id="2_f8nx3"]
+[ext_resource type="Texture2D" uid="uid://4fptt6all6ri" path="res://asset/square_health.png" id="3_46dfd"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ojh8v"]
+size = Vector2(100, 100)
+
+[node name="square" type="Area2D" groups=["enemy"]]
+scale = Vector2(2.5, 2.5)
+collision_layer = 2
+collision_mask = 5
+script = ExtResource("1_xb206")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("2_f8nx3")
+
+[node name="health" type="Sprite2D" parent="."]
+scale = Vector2(0.19999999, 0.19999999)
+texture = ExtResource("3_46dfd")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_ojh8v")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.05
+one_shot = true
+autostart = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

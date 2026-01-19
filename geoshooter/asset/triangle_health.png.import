@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cb77gntwcyjit"
-path="res://.godot/imported/bullet.png-7754c32cfe665bd5fde680956529c957.ctex"
+uid="uid://8djm0cwbhv5h"
+path="res://.godot/imported/triangle_health.png-02a5791e819d86b57679e3150d55584b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://asset/bullet.png"
-dest_files=["res://.godot/imported/bullet.png-7754c32cfe665bd5fde680956529c957.ctex"]
+source_file="res://asset/triangle_health.png"
+dest_files=["res://.godot/imported/triangle_health.png-02a5791e819d86b57679e3150d55584b.ctex"]
 
 [params]
 

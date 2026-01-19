@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cb77gntwcyjit"
-path="res://.godot/imported/bullet.png-7754c32cfe665bd5fde680956529c957.ctex"
+uid="uid://cp5ab4djp7cir"
+path="res://.godot/imported/triangle_bottom.png-a6917dac2c330ed504aed3af03c033d6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://asset/bullet.png"
-dest_files=["res://.godot/imported/bullet.png-7754c32cfe665bd5fde680956529c957.ctex"]
+source_file="res://asset/triangle_bottom.png"
+dest_files=["res://.godot/imported/triangle_bottom.png-a6917dac2c330ed504aed3af03c033d6.ctex"]
 
 [params]
 

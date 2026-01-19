@@ -1,7 +1,30 @@
-[gd_scene load_steps=3 format=3 uid="uid://cetqibemgnh11"]
+[gd_scene load_steps=9 format=3 uid="uid://cetqibemgnh11"]
 
 [ext_resource type="Script" uid="uid://bnn4ylwcl6udy" path="res://pentagon.gd" id="1_6snql"]
-[ext_resource type="Texture2D" uid="uid://lc80ppcwmn1c" path="res://asset/pentagon.png" id="2_yf7ah"]
+[ext_resource type="Texture2D" uid="uid://7j5laiqorfil" path="res://asset/pentagon_bottom.png" id="2_h2sdi"]
+[ext_resource type="Texture2D" uid="uid://bk43ugqtikdu5" path="res://asset/pentagon_health.png" id="3_2nv47"]
+[ext_resource type="Texture2D" uid="uid://lc80ppcwmn1c" path="res://asset/pentagon.png" id="4_2nv47"]
+[ext_resource type="AudioStream" uid="uid://dl1cvxuxiol1c" path="res://music/sfx/hurt_3.wav" id="5_ysqci"]
+
+[sub_resource type="Curve" id="Curve_2nv47"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.9432624, 0.15730345), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ysqci"]
+curve = SubResource("Curve_2nv47")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_b5tgm"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 40.0
+velocity_pivot = Vector3(0, 100, 0)
+direction = Vector3(1, -1, 0)
+initial_velocity_min = -30.0
+initial_velocity_max = 30.0
+gravity = Vector3(0, 200, 0)
+scale_min = 0.099999994
+scale_max = 0.19999999
+alpha_curve = SubResource("CurveTexture_ysqci")
 
 [node name="pentagon" type="Area2D" groups=["enemy"]]
 scale = Vector2(2.5, 2.5)
@@ -11,17 +34,40 @@ script = ExtResource("1_6snql")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.2, 0.2)
-texture = ExtResource("2_yf7ah")
+texture = ExtResource("2_h2sdi")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
-polygon = PackedVector2Array(-49, -10, -30, 48, 32, 46, 50, -13, -1, -47)
+[node name="health" type="Sprite2D" parent="."]
+scale = Vector2(0.19999999, 0.19999999)
+texture = ExtResource("3_2nv47")
+
+[node name="collision" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-44.799995, -9.999999, -27.599998, 42.8, 27.999998, 42.8, 45.199997, -9.999999, 0, -42.8)
 metadata/_edit_lock_ = true
 
-[node name="healthdisplay" type="RichTextLabel" parent="."]
-offset_left = -10.0
-offset_top = -3.0
-offset_right = 30.0
-offset_bottom = 37.0
-text = "10"
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.05
+one_shot = true
+autostart = true
+
+[node name="dead_particle" type="GPUParticles2D" parent="."]
+modulate = Color(1, 1, 1, 0.50980395)
+emitting = false
+amount = 20
+texture = ExtResource("4_2nv47")
+lifetime = 5.0
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_b5tgm")
+
+[node name="dead_timer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="music" type="Node" parent="."]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="music"]
+stream = ExtResource("5_ysqci")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="dead_timer" to="." method="_on_dead_timer_timeout"]

@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://cetqibemgnh11" path="res://code/pentagon.tscn" id="6_unppu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_44ujh"]
-size = Vector2(25, 692)
+size = Vector2(101, 692)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dfe3b"]
 size = Vector2(1178, 20)
@@ -47,7 +47,7 @@ script = ExtResource("1_44ujh")
 collision_layer = 8
 
 [node name="walls" type="CollisionShape2D" parent="Area2D"]
-position = Vector2(1165.5, 316)
+position = Vector2(1127.5, 316)
 shape = SubResource("RectangleShape2D_44ujh")
 
 [node name="walls2" type="CollisionShape2D" parent="Area2D"]
@@ -73,7 +73,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.10747976, 0.10747973, 0.10747973, 1)
+color = Color(0.18000486, 0.18000486, 0.18000486, 1)
 metadata/_edit_lock_ = true
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="score/ColorRect"]
@@ -92,7 +92,6 @@ position = Vector2(259, 131)
 
 [node name="player" parent="score/level" instance=ExtResource("2_wyj87")]
 unique_name_in_owner = true
-visible = false
 position = Vector2(526, 296)
 collision_mask = 10
 
@@ -129,10 +128,6 @@ text = "[center]PRESS ANY KEY TO START [/center]"
 [node name="spawn_timer" type="Timer" parent="Timers"]
 wait_time = 2.0
 
-[node name="invincible_timer" type="Timer" parent="Timers"]
-wait_time = 2.0
-
 [connection signal="timeout" from="Timers/rage_timer" to="." method="_on_rage_timer_timeout"]
 [connection signal="timeout" from="Timers/pierce_timer" to="." method="_on_pierce_timer_timeout"]
 [connection signal="timeout" from="Timers/spawn_timer" to="." method="_on_spawn_timer_timeout"]
-[connection signal="timeout" from="Timers/invincible_timer" to="." method="_on_invincible_timer_timeout"]
