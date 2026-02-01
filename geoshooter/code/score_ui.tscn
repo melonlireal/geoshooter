@@ -86,6 +86,7 @@ func _process(delta: float) -> void:
 "
 
 [node name="UI" type="Control"]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -224,6 +225,46 @@ nine_patch_stretch = true
 texture_under = ExtResource("5_wi50l")
 texture_progress = ExtResource("7_wi50l")
 
+[node name="gameover" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.25
+anchor_top = 0.25
+anchor_right = 0.75
+anchor_bottom = 0.7
+offset_top = 0.09597778
+offset_right = 0.23999023
+offset_bottom = -0.24804688
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 100
+text = "GAME OVER
+"
+
+[node name="restart" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.35
+anchor_top = 0.48000002
+anchor_right = 0.65
+anchor_bottom = 0.611
+offset_top = -0.040008545
+offset_bottom = 0.07199097
+grow_horizontal = 2
+grow_vertical = 2
+disabled = true
+
+[node name="Label" type="Label" parent="restart"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 50
+text = "       Restart"
+
 [connection signal="changed" from="ProgressBar" to="." method="_on_progress_bar_changed"]
 [connection signal="value_changed" from="ProgressBar" to="." method="_on_progress_bar_value_changed"]
 [connection signal="timeout" from="score_factor_decrease" to="." method="_on_score_factor_decrease_timeout"]
+[connection signal="pressed" from="restart" to="." method="_on_restart_pressed"]

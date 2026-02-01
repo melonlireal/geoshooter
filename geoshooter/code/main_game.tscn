@@ -1,9 +1,8 @@
-[gd_scene load_steps=16 format=3 uid="uid://s4aa004npjfs"]
+[gd_scene load_steps=15 format=3 uid="uid://s4aa004npjfs"]
 
 [ext_resource type="Script" uid="uid://cgvt47cl8kpmc" path="res://code/main_game.gd" id="1_44ujh"]
 [ext_resource type="PackedScene" uid="uid://dwwg067l8r37s" path="res://code/score_ui.tscn" id="1_p7g5i"]
 [ext_resource type="Texture2D" uid="uid://btbcduf0fklmb" path="res://asset/background1.png" id="2_bg1ql"]
-[ext_resource type="PackedScene" uid="uid://df7x3hsymu301" path="res://code/player.tscn" id="2_wyj87"]
 [ext_resource type="PackedScene" uid="uid://c1xsuen6pfee8" path="res://code/square.tscn" id="4_dfe3b"]
 [ext_resource type="PackedScene" uid="uid://cui3l7juujpp8" path="res://code/triangle.tscn" id="5_5g0dd"]
 [ext_resource type="PackedScene" uid="uid://cetqibemgnh11" path="res://code/pentagon.tscn" id="6_unppu"]
@@ -47,18 +46,26 @@ script = ExtResource("1_44ujh")
 collision_layer = 8
 
 [node name="walls" type="CollisionShape2D" parent="Area2D"]
+light_mask = 9
+visibility_layer = 9
 position = Vector2(1165.5, 316)
 shape = SubResource("RectangleShape2D_44ujh")
 
 [node name="walls2" type="CollisionShape2D" parent="Area2D"]
+light_mask = 9
+visibility_layer = 9
 position = Vector2(576, 664)
 shape = SubResource("RectangleShape2D_dfe3b")
 
 [node name="walls3" type="CollisionShape2D" parent="Area2D"]
+light_mask = 9
+visibility_layer = 9
 position = Vector2(-16, 322)
 shape = SubResource("RectangleShape2D_44ujh")
 
 [node name="walls4" type="CollisionShape2D" parent="Area2D"]
+light_mask = 9
+visibility_layer = 9
 position = Vector2(576, -16)
 shape = SubResource("RectangleShape2D_dfe3b")
 
@@ -90,12 +97,6 @@ y_sort_enabled = true
 [node name="square" parent="score/level" instance=ExtResource("4_dfe3b")]
 position = Vector2(259, 131)
 
-[node name="player" parent="score/level" instance=ExtResource("2_wyj87")]
-unique_name_in_owner = true
-visible = false
-position = Vector2(526, 296)
-collision_mask = 10
-
 [node name="pentagon" parent="score/level" instance=ExtResource("6_unppu")]
 position = Vector2(776, 155)
 
@@ -103,7 +104,6 @@ position = Vector2(776, 155)
 position = Vector2(526, 113)
 
 [node name="UI" parent="score" instance=ExtResource("1_p7g5i")]
-visible = false
 
 [node name="RichTextLabel" type="RichTextLabel" parent="score"]
 anchors_preset = -1
@@ -127,7 +127,7 @@ text = "[center]PRESS ANY KEY TO START [/center]"
 [node name="pierce_timer" type="Timer" parent="Timers"]
 
 [node name="spawn_timer" type="Timer" parent="Timers"]
-wait_time = 2.0
+wait_time = 0.5
 
 [node name="invincible_timer" type="Timer" parent="Timers"]
 wait_time = 2.0

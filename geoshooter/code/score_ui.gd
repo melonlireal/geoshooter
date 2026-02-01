@@ -27,10 +27,22 @@ var ene_tween: Tween = null
 
 signal rock
 signal end_rock
+signal spawn_player
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	score_factor_UI.text = ("[center]X%d[/center]" %score_factor)
 	music_cur.play()
+
+func start_game():
+	self.visible = true
+	$gameover.visible = false
+	$restart.visible = false
+	$restart.disabled = true
+	
+func end_game():
+	$gameover.visible = true
+	$restart.visible = true
+	$restart.disabled = false
 
 func _process(_delta: float) -> void:
 	if int(score_UI.get_parsed_text()) < score:
@@ -114,7 +126,7 @@ func update_factor():
 		return
 	score_factor = score_factor*2
 	progress_bar.max_value = progress_bar.max_value*2
-	progress_bar.value = progress_bar.max_value * 0.1
+	progress_bar.value = progress_bar.max_value * 0.3
 	score_factor_UI.text = ("[center]X%d[/center]" %score_factor)
 
 
@@ -127,3 +139,11 @@ func reset_factor():
 	progress_bar.value = (progress_bar.max_value/2) * 0.8
 	progress_bar.max_value = progress_bar.max_value/2
 	score_factor_UI.text = ("[center]X%d[/center]" %score_factor)
+
+
+func _on_restart_pressed() -> void:
+	score = 0
+	score_UI.text = "[center]"+ "0".repeat(SCOREDIGIT) + "[/center]"
+	score_factor = 1
+	start_game()
+	spawn_player.emit()

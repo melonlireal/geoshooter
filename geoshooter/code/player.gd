@@ -10,6 +10,7 @@ var pen_col: Color = Color(255, 0.0, 0.0, 1.0)
 var tri_col: Color = Color(0.988, 1.0, 0.0, 1.0)
 var squ_col: Color = Color(0.0, 0.847, 1.0, 1.0)
 var curr_col: Color = Color(1.0, 1.0, 1.0, 1.0)
+var def_col: Color = Color(1.0, 1.0, 1.0, 1.0)
 var can_shoot = true
 
 var pierce = false
@@ -24,6 +25,7 @@ signal decrease_fac
 signal player_dead
 
 func _process(_delta: float) -> void:
+	$Sprite2D.modulate = curr_col
 	if not is_inside_tree():
 		return
 	if Input.is_action_pressed("shoot"):
@@ -72,22 +74,21 @@ func get_hit():
 	$sfxs/get_hit.play()
 
 func switch_pierce_ammo():
-	#print("pierce")
-	$Sprite2D.modulate = tri_col
+	curr_col = tri_col
 	pierce = true
 	max_pierce = 2
 	
 func end_pierce_ammo():
-	$Sprite2D.modulate = curr_col
+	curr_col = def_col
 	pierce = false
 	max_pierce = 0
 	
 func switch_rage():
-	$Sprite2D.modulate = pen_col
-	#print("rage")
+	curr_col = pen_col
 	rage = true
 	
 func end_rage():
+	curr_col = def_col
 	rage = false
 	rage_factor = 2
 	

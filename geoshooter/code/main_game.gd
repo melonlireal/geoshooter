@@ -1,7 +1,7 @@
 extends Node2D
 
 @onready var scores = $score/UI
-@onready var player = %player
+@onready var player = null
 @onready var level = $score/level
 @onready var spawn_timer = $Timers/spawn_timer
 @onready var pierce_timer = $Timers/pierce_timer
@@ -20,9 +20,10 @@ var rock_tween:Tween = null
 var mouseDirection:Vector2 = Vector2.ZERO
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	%player.decrease_fac.connect(decrease_score_factor)
+	spawn_player()
 	$score/UI.rock.connect(rock)
 	$score/UI.end_rock.connect(end_rock)
+	$score/UI.spawn_player.connect(spawn_player)
 	pass # Replace with function body.
 
 func _process(_delta: float) -> void:
@@ -49,10 +50,20 @@ func _input(_event: InputEvent) -> void:
 		spawn_timer.start()
 		player.visible = true
 		$score/RichTextLabel.visible = false
-		$score/UI.visible = true
+		$score/UI.start_game()
 	mouseDirection = Input.get_vector("controller_move_mouse_left", "controller_move_mouse_right", "controller_move_mouse_up", "controller_move_mouse_down")
 	
 	
+func spawn_player():
+	var play:PackedScene = ResourceLoader.load("res://code/player.tscn")
+	var player_ready:Player = play.instantiate()
+	player_ready.position = Vector2(530, 296)
+	player_ready.scale = Vector2(0.5,0.5)
+	player_ready.visible = true
+	$score/level.add_child(player_ready)
+	player_ready.player_dead.connect(game_over)
+	player_ready.decrease_fac.connect(decrease_score_factor)
+	player = player_ready
 	
 func rock():
 	if rock_tween:
@@ -70,7 +81,6 @@ func end_rock():
 		return
 	rock_tween = create_tween()
 	rock_tween.tween_property($score/ColorRect, "color", Color(0.137, 0.137, 0.137, 1.0), 0.2)
-	#$score/ColorRect.color = Color(0.3, 0.3, 0.3, 1.0)
 	$score/ColorRect/GPUParticles2D.lifetime = 30.0
 	await rock_tween.finished
 	rock_tween.kill()
@@ -85,6 +95,10 @@ func enemy_died(dead_name: String):
 		"pen":
 			penene += 1
 	scores.update_energy(triene, squene, penene)
+	pass
+	
+func game_over():
+	$score/UI.end_game()
 	pass
 
 
@@ -139,7 +153,7 @@ func spawn_children(pos: Vector2, child: PackedScene, split_num: int, size: int)
 		new_enemy.set_health(rand_health * size)
 		var rand_score = randi_range(6,14)
 		new_enemy.score = rand_score * size
-		var rand_speed = randi_range(40,60) * speed_factor
+		var rand_speed = randi_range(50,70) * speed_factor
 		new_enemy.SPEED = rand_speed
 		new_enemy.dead.connect(enemy_died)
 		new_enemy.spawn_child.connect(spawn_children)
