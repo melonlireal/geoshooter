@@ -42,7 +42,7 @@ func _process(_delta: float) -> void:
 		bullet.get_direction(direction)
 		bullet.position = self.global_position
 		bullet.set_col(curr_col)
-		bullet.damage = randi_range(4,6)
+		bullet.damage = randi_range(6,10)
 		if pierce:
 			bullet.pierce_num = max_pierce
 			max_pierce += 1

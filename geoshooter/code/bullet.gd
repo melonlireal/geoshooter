@@ -1,8 +1,8 @@
 extends CharacterBody2D
 class_name Bullet
 
-const SPEED = 800
-@export var damage = 5
+const SPEED = 1200
+@export var damage = 10
 @export var damagebonus = 2
 @export var pierce_num = 0
 var direction: Vector2 = Vector2.ONE

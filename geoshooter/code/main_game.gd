@@ -30,7 +30,7 @@ func _process(_delta: float) -> void:
 	spawn_interval = 2 * (1 - min(scores.get_score()/100000.0, 0.5))
 	health_factor = 1 * (1 + min(scores.get_score()/100000.0, 1))
 	speed_factor = 1 * (1 + min(scores.get_score()/100000.0, 1))
-	max_size = 1 + min(scores.get_score()/500000, 4)
+	max_size = 1 + min(scores.get_score()/100000, 4)
 	spawn_timer.wait_time = spawn_interval
 	get_viewport().warp_mouse(get_global_mouse_position()+mouseDirection * 20)
 	# dynamic difficulty reaching maximum difficulty at one million socre
@@ -55,6 +55,8 @@ func _input(_event: InputEvent) -> void:
 	
 	
 func spawn_player():
+	for child in $score/level.get_children():
+		child.queue_free()
 	var play:PackedScene = ResourceLoader.load("res://code/player.tscn")
 	var player_ready:Player = play.instantiate()
 	player_ready.position = Vector2(530, 296)
@@ -149,9 +151,9 @@ func spawn_children(pos: Vector2, child: PackedScene, split_num: int, size: int)
 		var spawn_pos = pos + offset
 		new_enemy.position = pos
 		new_enemy.size = size
-		var rand_health = randi_range(8,12) * health_factor
+		var rand_health = randi_range(6,10) * health_factor
 		new_enemy.set_health(rand_health * size)
-		var rand_score = randi_range(6,14)
+		var rand_score = randi_range(35,78)
 		new_enemy.score = rand_score * size
 		var rand_speed = randi_range(50,70) * speed_factor
 		new_enemy.SPEED = rand_speed
